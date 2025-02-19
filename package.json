@@ -1,0 +1,27 @@
+{
+    "name": "servidor-web-github",
+    "version": "1.0.0",
+    "description": "Servidor web estático con seguridad en GitHub",
+    "main": "index.js",
+    "scripts": {
+      "start": "node server.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+      "express": "1.0.0",
+      "cors": "^2.8.5"
+    },
+    "devDependencies": {
+      "eslint": "^8.47.0"
+    },
+    "keywords": [
+      "servidor-web",
+      "github",
+      "dependabot",
+      "codeql",
+      "security"
+    ],
+    "author": "Tu Nombre",
+    "license": "MIT"
+  }
+  
