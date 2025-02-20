@@ -3,7 +3,7 @@ name: Deploy Dynamic JSON for Load Balancing
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 permissions:
