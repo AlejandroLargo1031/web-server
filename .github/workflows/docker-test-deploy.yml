@@ -1,0 +1,46 @@
+name: Docker Build, Test, and Deploy
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t web-server:latest .
+
+      - name: Run Docker container in background
+        run: |
+          docker run -d --name test_container -p 8080:80 web-server:latest
+
+      - name: Wait for container to start
+        run: sleep 10
+
+      - name: Test Docker container with curl
+        run: |
+          RESPONSE=$(curl -s http://localhost:8080/index.html)
+          echo "Response from container: $RESPONSE"
+          if [[ $RESPONSE != *"Simulación de Balanceo de Carga"* ]]; then
+            echo "Test failed: Expected content not found"
+            exit 1
+          fi
+
+      - name: Stop Docker container
+        run: docker stop test_container
+
+      - name: Remove Docker container
+        run: docker rm test_container
+
+      - name: Notify success
+        run: echo "Docker image built and tested successfully!"

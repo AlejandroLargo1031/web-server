@@ -3,7 +3,7 @@ name: Deploy Dynamic JSON for Load Balancing
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 permissions:
@@ -38,7 +38,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git add data1.json data2.json
           git commit -m "Actualizar archivos JSON dinámicos"
-          git push origin master
+          git push origin main
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -50,3 +50,15 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
+      - name: Purge Cloudflare Cache
+        if: ${{ always() }}
+        run: |
+          echo "Purgando caché en Cloudflare..."
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ b96c94b325014d14dff71d0e7f9bc8d7 }}/purge_cache" \
+          -H "Authorization: Bearer ${{ 46681R-T3BHsZG809T5DU5BXBa_hX2xduwJq0akI }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything": true}'
+      
+      - name: Notify Optimization
+        run: echo "El sitio se ha desplegado y se beneficiará de las optimizaciones de Cloudflare (caché, compresión, auto minify, etc.)."
